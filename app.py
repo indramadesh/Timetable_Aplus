@@ -37,7 +37,7 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 # Strong secret key (important for login + sessions)
 app.secret_key = os.environ.get("SECRET_KEY") or "super_strong_timetable_secret_2026"
 
-DATABASE_URL = os.environ.get("DATABASE_URL","postgresql://postgres:Indraproj98@db.rftvwaxduivgcfsfpvnd.supabase.co:5432/postgres"
+DATABASE_URL = os.environ.get("DATABASE_URL"
 )
 
 # -------- DATABASE INIT --------
