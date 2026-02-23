@@ -86,3 +86,54 @@ input {
     border-radius: 5px;
     border: 1px solid #ccc;
 }
+/* ================= MOBILE RESPONSIVE FIX ================= */
+@media (max-width: 768px) {
+
+    /* Reduce container padding for small screens */
+    .container {
+        padding: 15px;
+    }
+
+    /* Make cards fit mobile width */
+    .card {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    /* STACK buttons instead of squishing in one row */
+    .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        font-size: 16px;
+        padding: 14px;
+        text-align: center;
+    }
+
+    /* Fix tables breaking layout on mobile */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    /* Navbar scaling */
+    .navbar {
+        font-size: 16px;
+        padding: 12px 15px;
+        text-align: center;
+    }
+
+    /* Inputs full width for touch usability */
+    input {
+        width: 100%;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+}
