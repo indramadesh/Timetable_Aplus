@@ -5,8 +5,11 @@ import psycopg2
 
 from werkzeug.security import generate_password_hash, check_password_hash
 def get_db_connection():
-    conn = psycopg2.connect(DATABASE_URL)
-    return conn
+    return psycopg2.connect(
+        DATABASE_URL,
+        sslmode="require",
+        connect_timeout=10
+    )
 def validate_subject_feasibility(class_id, periods_per_week):
     conn = get_db_connection()
     cur = conn.cursor()
@@ -113,7 +116,9 @@ def init_db():
     conn.commit()
     cur.close()
     conn.close()
-init_db()
+if __name__ == "__main__":
+    init_db()  # ✅ only run DB init locally, not on Render import
+    app.run(host="0.0.0.0", port=5000, debug=True)
 
 # -------- LOGIN --------
 
