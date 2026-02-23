@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timetable Conflict & Load Analysis Report</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-top: 35px;
+            color: #2c3e50;
+            border-left: 6px solid #3498db;
+            padding-left: 10px;
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        ul {
+            line-height: 1.8;
+        }
+
+        .good {
+            color: green;
+            font-weight: bold;
+        }
+
+        .warn {
+            color: #e67e22;
+            font-weight: bold;
+        }
+
+        .bad {
+            color: red;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 22px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-btn:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<h1>📊 Timetable Conflict & Load Analysis Report</h1>
+
+{% if report %}
+
+<div class="section">
+    <h2>⚠️ Faculty Daily Limit Violations</h2>
+    {% if report.faculty_overload and report.faculty_overload|length > 0 %}
+        <ul>
+            {% for item in report.faculty_overload %}
+                <li class="bad">{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="good">No Faculty Overload Detected ✔</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <h2>👨‍🏫 Underutilized Faculty (Unused)</h2>
+    {% if report.underutilized_faculty and report.underutilized_faculty|length > 0 %}
+        <ul>
+            {% for item in report.underutilized_faculty %}
+                <li class="warn">{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="good">All faculty are utilized properly ✔</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <h2>📚 Class Load Analysis</h2>
+
+    {% if report.true_overload_days %}
+        <h3 class="bad">True Overload (Invalid Scheduling)</h3>
+        <ul>
+            {% for item in report.true_overload_days %}
+                <li class="bad">{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if report.optimal_days %}
+        <h3 class="good">Optimal Schedule (Fully Utilized)</h3>
+        <ul>
+            {% for item in report.optimal_days %}
+                <li class="good">{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if report.balanced_days %}
+        <h3 class="good">Balanced Days</h3>
+        <ul>
+            {% for item in report.balanced_days %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if report.underutilized_days %}
+        <h3 class="warn">Underutilized Days</h3>
+        <ul>
+            {% for item in report.underutilized_days %}
+                <li class="warn">{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+
+<div class="section">
+    <h2>📈 Faculty Workload Summary</h2>
+    <ul>
+        {# CRITICAL FIX: use faculty_total_load NOT faculty_usage #}
+        {% for faculty, count in report.faculty_total_load.items() %}
+            <li><strong>{{ faculty }}</strong> : {{ count }} periods assigned</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% else %}
+    <h2 style="color:red; text-align:center;">
+        No Report Available. Generate timetable first.
+    </h2>
+{% endif %}
+
+<a href="/dashboard" class="back-btn">⬅ Back to Dashboard</a>
+
+</body>
+</html>

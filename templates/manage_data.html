@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Data - Smart Timetable</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 18px;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .container {
+            width: 95%;
+            margin: 20px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #2a5298;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        input, select {
+            padding: 8px;
+            margin: 6px 6px 12px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #1e3c72;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .lab-yes {
+            color: white;
+            background: #8e44ad;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .lab-no {
+            color: white;
+            background: #7f8c8d;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #2a5298;
+            color: white;
+            padding: 10px;
+        }
+
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f2f7ff;
+        }
+
+        .back-btn {
+            display: block;
+            width: 240px;
+            margin: 30px auto;
+            text-align: center;
+            background: #27ae60;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background: #1e8449;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    🛠 Smart Timetable - Manage Data Panel
+</div>
+
+<div class="container">
+
+    <!-- ADD DATA PANEL -->
+    <div class="card">
+        <h2>➕ Add New Data</h2>
+
+        <!-- Add Faculty -->
+        <h3>👨‍🏫 Add Faculty</h3>
+        <form method="POST" action="/add_faculty">
+            <input type="text" name="name" placeholder="Faculty Name" required>
+            <input type="number" name="max_classes" placeholder="Max Classes Per Day" min="1" required>
+            <button type="submit">Add Faculty</button>
+        </form>
+
+        <!-- Add Class -->
+        <h3>🏫 Add Class</h3>
+        <form method="POST" action="/add_class">
+            <input type="text" name="name" placeholder="Class Name (CSE-A)" required>
+            <input type="number" name="periods" placeholder="Periods Per Day" required>
+            <input type="number" name="days" placeholder="Working Days" required>
+            <input type="text" name="start_time" placeholder="Start Time (09:15)">
+            <input type="number" name="break_after" placeholder="Break After Period" required>
+            <button type="submit">Add Class</button>
+        </form>
+
+        <!-- Add Subject -->
+        <h3>📚 Add Subject</h3>
+        <form method="POST" action="/add_subject">
+            <input type="text" name="name" placeholder="Subject Name (DBMS)" required>
+            <input type="number" name="periods" placeholder="Periods Per Week" required>
+
+            <label>
+                <input type="checkbox" name="is_lab"> Is Lab Subject (Continuous Slots)
+            </label>
+
+            <input type="number" name="lab_duration" placeholder="Lab Duration (e.g., 2 or 3)">
+            <button type="submit">Add Subject</button>
+        </form>
+
+        <!-- Assignment -->
+        <h3>🔗 Assign Subject to Class & Faculty</h3>
+        <form method="POST" action="/add_assignment">
+            <select name="subject_id" required>
+                <option value="">Select Subject</option>
+                {% for s in subjects %}
+                <option value="{{ s[0] }}">{{ s[1] }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="class_id" required>
+                <option value="">Select Class</option>
+                {% for c in classes %}
+                <option value="{{ c[0] }}">{{ c[1] }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="faculty_id" required>
+                <option value="">Select Faculty</option>
+                {% for f in faculty %}
+                <option value="{{ f[0] }}">{{ f[1] }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">📌 Assign Subject</button>
+        </form>
+    </div>
+
+    <!-- FACULTY MANAGEMENT -->
+    <div class="card">
+        <h2>👨‍🏫 Faculty Management</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Max Classes/Day</th>
+                <th>Actions</th>
+            </tr>
+            {% for f in faculty %}
+            <tr>
+                <form method="POST" action="/update_faculty_inline">
+                    <td>{{ f[0] }}<input type="hidden" name="id" value="{{ f[0] }}"></td>
+                    <td><input type="text" name="name" value="{{ f[1] }}"></td>
+                    <td><input type="number" name="max_classes" value="{{ f[2] }}"></td>
+                    <td>
+                        <button type="submit">💾 Save</button>
+                        <a class="delete-btn" href="/delete_faculty/{{ f[0] }}">Delete</a>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- CLASSES MANAGEMENT -->
+    <div class="card">
+        <h2>🏫 Classes Management</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Periods/Day</th>
+                <th>Days</th>
+                <th>Start Time</th>
+                <th>Break After</th>
+                <th>Actions</th>
+            </tr>
+            {% for c in classes %}
+            <tr>
+                <form method="POST" action="/update_class_inline">
+                    <td>{{ c[0] }}<input type="hidden" name="id" value="{{ c[0] }}"></td>
+                    <td><input type="text" name="name" value="{{ c[1] }}"></td>
+                    <td><input type="number" name="periods" value="{{ c[2] }}"></td>
+                    <td><input type="number" name="days" value="{{ c[3] }}"></td>
+                    <td><input type="text" name="start_time" value="{{ c[4] }}"></td>
+                    <td><input type="number" name="break_after" value="{{ c[5] }}"></td>
+                    <td>
+                        <button type="submit">💾 Save</button>
+                        <a class="delete-btn" href="/delete_class/{{ c[0] }}">Delete</a>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- SUBJECT MANAGEMENT -->
+    <div class="card">
+        <h2>📚 Subjects Management</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Periods/Week</th>
+                <th>Lab</th>
+                <th>Lab Duration</th>
+                <th>Actions</th>
+            </tr>
+            {% for s in subjects %}
+            <tr>
+                <form method="POST" action="/update_subject_inline">
+                    <td>{{ s[0] }}<input type="hidden" name="id" value="{{ s[0] }}"></td>
+                    <td><input type="text" name="name" value="{{ s[1] }}"></td>
+                    <td><input type="number" name="periods" value="{{ s[4] }}"></td>
+                    <td>
+                        {% if s[2] == 1 %}
+                            <span class="lab-yes">LAB</span>
+                        {% else %}
+                            <span class="lab-no">THEORY</span>
+                        {% endif %}
+                    </td>
+                    <td><input type="number" name="lab_duration" value="{{ s[3] }}"></td>
+                    <td>
+                        <button type="submit">💾 Save</button>
+                        <a class="delete-btn" href="/delete_subject/{{ s[0] }}">Delete</a>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- ASSIGNMENTS (CRITICAL FOR TIMETABLE) -->
+    <div class="card">
+        <h2>🔗 Subject Assignments (Core for Timetable)</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Subject ID</th>
+                <th>Class ID</th>
+                <th>Faculty ID</th>
+                <th>Actions</th>
+            </tr>
+            {% for a in assignments %}
+            <tr>
+                <td>{{ a[0] }}</td>
+                <td>{{ a[1] }}</td>
+                <td>{{ a[2] }}</td>
+                <td>{{ a[3] }}</td>
+                <td>
+                    <a class="delete-btn" href="/delete_assignment/{{ a[0] }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <a href="/dashboard" class="back-btn">⬅ Back to Dashboard</a>
+
+</div>
+</body>
+</html>

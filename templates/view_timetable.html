@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generated Timetable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        h2 {
+            margin-top: 40px;
+            color: #2c3e50;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 12px 22px;
+            font-size: 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            color: white;
+        }
+
+        .excel-btn {
+            background-color: #2ecc71;
+        }
+
+        .excel-btn:hover {
+            background-color: #27ae60;
+        }
+
+        .faculty-btn {
+            background-color: #3498db;
+        }
+
+        .faculty-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .back-btn {
+            background-color: #e67e22;
+        }
+
+        .back-btn:hover {
+            background-color: #d35400;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 50px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+
+        td {
+            font-weight: 500;
+        }
+
+        .break-cell {
+            background-color: #ffeaa7;
+            font-weight: bold;
+        }
+
+        .lab-cell {
+            background-color: #d6eaf8;
+            font-weight: bold;
+        }
+
+        .free-cell {
+            color: #999;
+            font-style: italic;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: red;
+            font-size: 18px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>College Timetable Generator - Output</h1>
+
+    <div class="btn-container">
+        <!-- Excel Download -->
+        <a href="/export_excel">
+            <button class="btn excel-btn">Download Excel Timetable</button>
+        </a>
+        <a href="/conflict_report">
+            <button class="btn" style="background-color:#9b59b6;">
+        View Conflict & Load Report
+    </button>
+</a>
+
+        <!-- Faculty Timetable -->
+        <a href="/faculty_timetable">
+            <button class="btn faculty-btn">View Faculty Timetable</button>
+        </a>
+
+        <!-- Back to Dashboard (optional but professional) -->
+        <a href="/dashboard">
+            <button class="btn back-btn">Back to Dashboard</button>
+        </a>
+    </div>
+
+    {% if timetable and timetable|length > 0 %}
+
+        {% for class_name, class_table in timetable.items() %}
+            <h2>Class: {{ class_name }}</h2>
+
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Day / Period</th>
+
+                        {# Safe dynamic period detection #}
+                        {% set first_day = (class_table.values() | list)[0] %}
+                        {% for i in range(first_day|length) %}
+                            <th>Period {{ i + 1 }}</th>
+                        {% endfor %}
+                    </tr>
+
+                    {% for day, periods in class_table.items() %}
+                    <tr>
+                        <th>{{ day }}</th>
+
+                        {% for subject in periods %}
+                            {% if subject == "BREAK" %}
+                                <td class="break-cell">BREAK</td>
+
+                            {% elif subject and "Lab" in subject %}
+                                <td class="lab-cell">{{ subject }}</td>
+
+                            {% elif subject == "Free" %}
+                                <td class="free-cell">Free</td>
+
+                            {% else %}
+                                <td>{{ subject }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <div class="empty-message">
+            No Timetable Generated Yet. Please generate timetable first.
+        </div>
+    {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Faculty Timetable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            color: #2c3e50;
+        }
+
+        .btn-container {
+            margin-bottom: 25px;
+        }
+
+        .back-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 50px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+            margin: auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        td {
+            font-weight: 500;
+        }
+
+        .break-cell {
+            background-color: #ffeaa7;
+            font-weight: bold;
+        }
+
+        .free-cell {
+            color: #999;
+        }
+
+        .lab-cell {
+            background-color: #d6eaf8;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>👨‍🏫 Faculty Timetable</h1>
+
+    <div class="btn-container">
+        <a href="/dashboard" class="back-btn">⬅ Back to Dashboard</a>
+    </div>
+
+    {# CRITICAL: Must match app.py variable name = faculty_tables #}
+    {% if faculty_tables and faculty_tables|length > 0 %}
+
+        {% for faculty, days in faculty_tables.items() %}
+            <h2>Faculty: {{ faculty }}</h2>
+
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Day / Period</th>
+
+                        {# Get number of periods dynamically #}
+                        {% set first_day = days.values() | list | first %}
+                        {% if first_day %}
+                            {% for i in range(first_day | length) %}
+                                <th>Period {{ i + 1 }}</th>
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+
+                    {% for day, periods in days.items() %}
+                    <tr>
+                        <th>{{ day }}</th>
+
+                        {% for slot in periods %}
+                            {% if slot == "BREAK" %}
+                                <td class="break-cell">BREAK</td>
+
+                            {% elif slot == "Free" %}
+                                <td class="free-cell">Free</td>
+
+                            {% elif "(Lab)" in slot %}
+                                <td class="lab-cell">{{ slot }}</td>
+
+                            {% else %}
+                                <td>{{ slot }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+        <h2 style="color:red;">No Faculty Timetable Generated Yet</h2>
+        <p>Generate timetable first from dashboard.</p>
+    {% endif %}
+
+</body>
+</html>

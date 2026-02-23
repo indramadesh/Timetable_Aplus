@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Subject - Smart Timetable</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            padding: 40px;
+        }
+
+        .container {
+            width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2ecc71;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #27ae60;
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            background: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .note {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📚 Add New Subject</h2>
+
+    <div class="note">
+        ⚠️ Note: Subject is created first.  
+        Assignment to Class & Faculty is done separately in Manage Data panel.
+    </div>
+
+    <form method="POST" action="/add_subject">
+
+        <!-- SUBJECT NAME -->
+        <label>Subject Name</label>
+        <input type="text" name="name" placeholder="e.g., Mathematics, DBMS, Physics Lab" required>
+
+        <!-- CRITICAL: MUST BE periods_per_week (NOT periods) -->
+        <label>Periods Per Week</label>
+        <input type="number" name="periods_per_week" min="1" placeholder="e.g., 4 or 5" required>
+
+        <!-- LAB CHECKBOX (VERY IMPORTANT) -->
+        <div class="checkbox-row">
+            <input type="checkbox" name="is_lab" id="is_lab">
+            <label for="is_lab">Is this a Lab Subject?</label>
+        </div>
+
+        <!-- LAB DURATION -->
+        <label>Lab Duration (Continuous Periods)</label>
+        <input type="number" name="lab_duration" min="1" placeholder="e.g., 2 or 3 (only for labs)">
+
+        <button type="submit">➕ Add Subject</button>
+    </form>
+
+    <a href="/manage_data" class="back-btn">⬅ Back to Manage Data</a>
+</div>
+
+</body>
+</html>

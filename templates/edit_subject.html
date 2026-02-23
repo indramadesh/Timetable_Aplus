@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Subject</title>
+</head>
+<body>
+    <h2>Edit Subject</h2>
+
+    {% if subject %}
+    <form method="POST">
+        <label>Subject Name:</label><br>
+        <input type="text" name="name" value="{{ subject[1] }}" required><br><br>
+
+        <label>Periods Per Week:</label><br>
+        <input type="number" name="periods_per_week" value="{{ subject[6] }}" required><br><br>
+
+        <label>Is Lab:</label>
+        <input type="checkbox" name="is_lab" {% if subject[4] == 1 %}checked{% endif %}><br><br>
+
+        <label>Lab Duration (Periods):</label><br>
+        <input type="number" name="lab_duration" value="{{ subject[5] if subject[5] else 1 }}"><br><br>
+
+        <button type="submit">Update Subject</button>
+    </form>
+    {% else %}
+        <h3 style="color:red;">Subject not found!</h3>
+    {% endif %}
+
+    <br>
+    <a href="/manage_data">Back to Manage Data</a>
+</body>
+</html>

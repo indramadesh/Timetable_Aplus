@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timetable Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .chart-container {
+            width: 80%;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<h1>📊 Faculty Workload Analytics Dashboard</h1>
+
+<div class="chart-container">
+    <canvas id="facultyChart"></canvas>
+</div>
+
+<script>
+    const labels = {{ labels | default([]) | tojson }};
+    const values = {{ values | default([]) | tojson }};
+
+    const ctx = document.getElementById('facultyChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Periods Assigned',
+                data: values,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+</script>

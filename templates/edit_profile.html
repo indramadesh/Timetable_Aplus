@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile</title>
+    <style>
+        body { font-family: Arial; background:#f4f6f9; text-align:center; padding:40px; }
+        .card { background:white; padding:30px; width:400px; margin:auto; border-radius:10px; }
+        input { width:90%; padding:10px; margin:10px; }
+        button { padding:10px 20px; background:#3498db; color:white; border:none; border-radius:6px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Edit Admin Profile</h2>
+    <form method="POST">
+        <input type="text" name="name" value="{{ admin[0] }}" required>
+        <input type="password" name="password" placeholder="New Password (optional)">
+        <button type="submit">Update Profile</button>
+    </form>
+</div>
+
+</body>
+</html>

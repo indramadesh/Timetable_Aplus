@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Database (DO NOT DEPLOY LOCAL DB)
+*.db
+*.sqlite3
+
+# Excel exports
+*.xlsx
+
+# Environment
+.env
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db

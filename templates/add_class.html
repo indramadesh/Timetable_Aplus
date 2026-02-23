@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Class</title>
+</head>
+<body>
+    <h2>Add Class Configuration</h2>
+    {% if success %}
+    <p style="color:green; font-weight:bold;">{{ success }}</p>
+{% endif %}
+
+<h3>Existing Classes:</h3>
+<ul>
+{% for c in classes %}
+    <li>{{ c[1] }} ({{ c[2] }} periods/day, {{ c[3] }} days)</li>
+{% endfor %}
+</ul>
+
+    <form method="POST">
+        <label>Class Name (Ex: CSE-1):</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Periods Per Day (6 or 7):</label><br>
+        <input type="number" name="periods" required><br><br>
+
+        <label>Working Days (5 or 6):</label><br>
+        <input type="number" name="days" required><br><br>
+
+        <label>College Start Time (HH:MM):</label><br>
+        <input type="text" name="start_time" placeholder="09:00" required><br><br>
+
+        <label>Break After Which Period (Ex: 3):</label><br>
+        <input type="number" name="break_after" required><br><br>
+
+        <button type="submit">Save Class</button>
+    </form>
+
+    <br>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Faculty</title>
+</head>
+<body>
+    <h2>Edit Faculty</h2>
+
+    <form method="POST">
+        <label>Name:</label><br>
+        <input type="text" name="name" value="{{ faculty[1] }}" required><br><br>
+
+        <label>Max Classes Per Day:</label><br>
+        <input type="number" name="max_classes" value="{{ faculty[2] }}" required><br><br>
+
+        <button type="submit">Update Faculty</button>
+    </form>
+
+    <br>
+    <a href="/manage_data">Back to Manage Data</a>
+</body>
+</html>
