@@ -117,9 +117,10 @@
             <td>{{ admin[0] }}</td>
             <td>{{ admin[1] }}</td>
             <td>{{ admin[2] }}</td>
-            <td>
-                <a href="/delete_admin/{{ admin[0] }}" class="delete-btn">Delete</a>
-            </td>
+            <form method="POST" action="/delete_admin/{{ admin[0] }}" style="display:inline;">
+    <input type="password" name="master_key" placeholder="Master Key" required>
+    <button type="submit" class="btn btn-danger">🗑 Delete Admin</button>
+</form>
         </tr>
         {% endfor %}
     </table>

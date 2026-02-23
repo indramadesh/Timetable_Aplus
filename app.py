@@ -1102,15 +1102,22 @@ def manage_admin():
 
     return render_template("manage_admin.html", admins=admins)
 
-@app.route("/delete_admin/<int:admin_id>")
+@app.route("/delete_admin/<int:admin_id>", methods=["POST"])
 def delete_admin(admin_id):
     if "user" not in session:
         return redirect("/")
 
+    master_key_input = request.form.get("master_key")
+    real_master_key = os.environ.get("MASTER_ADMIN_KEY")
+
+    # HARD SECURITY CHECK
+    if not master_key_input or master_key_input != real_master_key:
+        return "<h3 style='color:red;'>Unauthorized: Invalid Master Key</h3><a href='/manage_admin'>Go Back</a>"
+
     conn = get_db_connection()
     cur = conn.cursor()
 
-    # Prevent deleting last admin
+    # Prevent deleting last admin (VERY IMPORTANT)
     cur.execute("SELECT COUNT(*) FROM admin")
     count = cur.fetchone()[0]
 
